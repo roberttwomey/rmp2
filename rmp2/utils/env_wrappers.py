@@ -13,6 +13,8 @@ def load_env_wrapper(envid, dtype=tf.float32):
         return ThreeLinkRMPWrapper(dtype=dtype)
     elif envid == 'franka' or envid == 'franka_residual':
         return FrankaWrapper(dtype=dtype)
+    elif envid == 'xarm7':
+        return Xarm7Wrapper(dtype=dtype)
     elif envid == 'franka_rmp':
         return FrankaRMPWrapper(dtype=dtype)
     else:
@@ -120,6 +122,51 @@ class ThreeLinkFullRMPWrapper(EnvWrapper):
     def policy_output_to_action(actions):
         return actions
 
+
+class Xarm7Wrapper(EnvWrapper):
+    def __init__(self, dtype=tf.float32):
+        self.dtype = dtype
+
+    def obs_to_policy_input(self, obs):
+        return tf.cast(obs, self.dtype)
+
+    def obs_to_value_input(self, obs):
+        return tf.cast(obs, self.dtype)
+
+    @staticmethod
+    def policy_output_to_action(actions):
+        return actions
+
+
+class Xarm7FullRMPWrapper(EnvWrapper):
+    def __init__(self, dtype='float32'):
+        self.dtype = dtype
+
+    def obs_to_policy_input(self, obs):
+        obs = tf.cast(obs, self.dtype)
+        batch_size, obs_dim = obs.shape
+        batch_size, obs_dim = int(batch_size), int(obs_dim)
+
+        num_obstacles = int((obs_dim - 24) / 7)
+
+        sin_q = tf.gather(obs, range(0, 7), axis=1)
+        cos_q = tf.gather(obs, range(7, 14), axis=1)
+        q = tf.atan2(sin_q, cos_q)
+        qd = tf.gather(obs, range(14, 21), axis=1)
+        obstacles = tf.gather(obs, range(obs_dim - 4 * num_obstacles, obs_dim), axis=1)
+        return {'q': q, 'qd': qd, 'goal': None, 'obstacles': obstacles}
+
+    def obs_to_value_input(self, obs):
+        obs = tf.cast(obs, self.dtype)
+        batch_size, obs_dim = obs.shape
+        batch_size, obs_dim = int(batch_size), int(obs_dim)
+        obs_to_value = tf.gather(obs, range(0, obs_dim - 9), axis=1)
+        return obs_to_value
+
+    @staticmethod
+    def policy_output_to_action(actions):
+        return actions
+    
 
 class FrankaWrapper(EnvWrapper):
     def __init__(self, dtype=tf.float32):

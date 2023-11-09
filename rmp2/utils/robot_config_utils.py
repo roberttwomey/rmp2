@@ -11,6 +11,8 @@ def load_robot_config(robot_name=None, config_path=None):
             config_path = os.path.join(os.path.dirname(__file__), '..', 'configs', 'franka_config.yaml')
         elif robot_name == '3link':
             config_path = os.path.join(os.path.dirname(__file__), '..', 'configs', '3link_config.yaml')
+        elif robot_name == 'xarm7':
+            config_path = os.path.join(os.path.dirname(__file__), '..', 'configs', 'xarm7_config.yaml')
         else:
             raise ValueError
 
@@ -31,6 +33,8 @@ def get_robot_urdf_path(robot_name):
         urdf_path = os.path.join(os.path.dirname(__file__), '..', 'urdf', 'panda.urdf')
     elif robot_name == '3link':
         urdf_path = os.path.join(os.path.dirname(__file__), '..', 'urdf', 'three_link_planar_robot.urdf')
+    elif robot_name == 'xarm7':
+        urdf_path = os.path.join(os.path.dirname(__file__), '..', 'urdf', 'xarm7/xarm7.urdf')
     else:
         raise ValueError
 
@@ -41,6 +45,8 @@ def get_robot_eef_uid(robot_name):
         eef_uid = 14
     elif robot_name == "3link":
         eef_uid = 6
+    elif robot_name == "xarm7":
+        eef_uid = 7
     else:
         raise ValueError
     return eef_uid

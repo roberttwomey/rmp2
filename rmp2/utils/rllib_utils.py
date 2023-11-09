@@ -9,6 +9,10 @@ from rmp2.envs import *
 from rmp2.policies.gaussian_policy import DiagGaussianModel
 
 def register_envs_and_models():
+    def xarm7_env_creator(env_config):
+        return Xarm7Env(env_config)
+        register_env("xarm7", xarm7_env_creator)
+
     def franka_env_creator(env_config):
         return FrankaEnv(env_config)
     register_env("franka", franka_env_creator)

@@ -83,7 +83,7 @@ class RobotEnv(gym.Env):
                 workspace_dim,
                 config=None):
         """
-        :param robot_name: str, the name of the robot, 3link or franka
+        :param robot_name: str, the name of the robot, 3link, xarm, or franka
         :param workspace_dim: int, workspace dimension, either 2 or 3
         :param config: dict, for overwriting the default configs
         """
