@@ -12,7 +12,7 @@ conda env create -f environment.yml
 ```
 
 ### Hand-designed RMP2 for Robot Control
-To run a goal reaching task for an xArm 7 robot (Twomey):
+First checkout branch `twomey`. Then to run a goal reaching task for an xArm 7 robot (Twomey):
 ```
 python examples/rmp2/rmp2_xarm7.py
 ```
